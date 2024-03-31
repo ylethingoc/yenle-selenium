@@ -6,24 +6,25 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import pages.saferailway.BookTicketPage;
 import pages.saferailway.HomePage;
-import pages.saferailway.MainPage;
 import pages.saferailway.LoginPage;
+import pages.saferailway.MainPage;
 import pages.saferailway.TicketPricePage;
 import pages.saferailway.TimeTablePage;
 
-import static helpers.GlobalVariables.PASSWORD;
-import static helpers.GlobalVariables.USER_NAME;
+import static helpers.Constants.PASSWORD;
+import static helpers.Constants.USER_NAME;
 
 public class BookTicketsTest {
     WebDriver driver;
     MainPage mainPage;
+
     @BeforeMethod
     public void setup() {
         driver = WebDriverHelper.getWebDriver();
         mainPage = new MainPage(driver);
     }
 
-    @Test(description = "Book Ticket From Train Timetable")
+    @Test(description = "Validate that user is able to book the tickets successfully")
     public void bookTwoTickets() {
         // navigate to http://saferailway.somee.com/, then click on the Login label
         driver.get("http://saferailway.somee.com/");

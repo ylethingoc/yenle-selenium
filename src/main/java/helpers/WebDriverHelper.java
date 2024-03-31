@@ -13,7 +13,7 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import java.util.concurrent.TimeUnit;
 
-import static helpers.GlobalVariables.WAIT_TIME_30_SECS;
+import static helpers.Constants.WAIT_TIME_30_SECS;
 
 public class WebDriverHelper {
     public static WebDriver getWebDriver() {

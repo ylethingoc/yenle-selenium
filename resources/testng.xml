@@ -4,7 +4,7 @@
         <classes>
             <class name="CreateAnAccountTest"/>
             <class name="BookTicketsTest"/>
-            <class name="HerokuDownloadTest"/>
+            <class name="HerokuDownloadUploadTest"/>
             <!-- Add more test classes as needed -->
         </classes>
     </test>

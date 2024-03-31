@@ -11,15 +11,17 @@ import pages.saferailway.RegisterPage;
 
 public class CreateAnAccountTest {
 
+    WebDriver driver;
     EmailHomePage emailHomePage;
     MainPage mainPage;
-    WebDriver driver;
 
     @BeforeMethod
     public void setup() {
         driver = WebDriverHelper.getWebDriver();
+        mainPage = new MainPage(driver);
     }
-    @Test(description = "Create an Safe Railway account")
+
+    @Test(description = "Validate that user is able to create an account successfully")
     public void createAnRailwayAccount() {
         // navigate to https://www.guerrillamail.com/inbox and get an email
         driver.get("https://www.guerrillamail.com/inbox");
@@ -50,7 +52,8 @@ public class CreateAnAccountTest {
 
     @AfterMethod
     public void teardown() {
-        driver.quit();
+        if (driver != null) {
+            driver.quit();
+        }
     }
-
 }
