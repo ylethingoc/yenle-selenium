@@ -7,6 +7,9 @@ import pages.saferailway.BookTicketPage;
 import pages.saferailway.HomePage;
 import pages.saferailway.LoginPage;
 import pages.saferailway.MyTicketPage;
+
+import java.util.Map;
+
 public class FTTC02 extends TestBase {
 
     LoginPage loginPage;
@@ -14,17 +17,12 @@ public class FTTC02 extends TestBase {
     MyTicketPage myTicketPage;
 
 
-    @Override
-    protected String getTestClassName() {
-        return this.getClass().getSimpleName();
-    }
-
-    @Test(description = "Error displays when user applies filter with un-existed value of 'Status' in 'Manage ticket' table")
-    public void FTTC02() {
+    @Test(dataProvider = "dataProvider", description = "Error displays when user applies filter with un-existed value of 'Status' in 'Manage ticket' table")
+    public void FTTC02(Map<String, String> data) {
         logStep(Status.INFO,"Step #1: Login with a valid account");
         HomePage homePage = new HomePage(driver);
         loginPage = homePage.clickOnLoginLabel(driver);
-        homePage = loginPage.loginWithValidAccount(TestBase.getEmail(), TestBase.getPassword());
+        homePage = loginPage.loginWithValidAccount(data.get("Email"), data.get("Password"));
 
         logStep(Status.INFO,"Step #2: Book more than 6 tickets");
         bookTicketPage = homePage.clickBookTicketLabel(driver);

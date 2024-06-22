@@ -7,16 +7,12 @@ public class GlobalVariables {
         this.configParser = configParser;
     }
 
-    public String getEmail() {
-        return configParser.getProperty("email");
-    }
-
-    public String getPassword() {
-        return configParser.getProperty("password");
-    }
-
     public String getBrowser() {
         return configParser.getProperty("browser");
+    }
+
+    public String getRunMode() {
+        return configParser.getProperty("runMode");
     }
 
     public String getBaseUrl() {

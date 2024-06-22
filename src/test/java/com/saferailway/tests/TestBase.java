@@ -5,7 +5,6 @@ import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
 import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.apache.logging.log4j.LogManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -13,13 +12,16 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.AfterSuite;
+import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
+import org.testng.annotations.DataProvider;
 import pages.saferailway.HomePage;
 import pages.saferailway.MyTicketPage;
 import utils.ConfigParser;
 import utils.GlobalVariables;
-import utils.JsonParser;
+import utils.JSONUtils;
 
+import java.lang.reflect.Method;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;
@@ -29,36 +31,47 @@ import static utils.GlobalVariables.WAIT_TIME_30_SECS;
 
 public class TestBase {
 
-    protected static ExtentReports extentReports;
-    protected static ExtentTest extentTest;
-    protected static String timestamp;
+    protected ExtentReports extentReports;
+    protected ExtentTest extentTest;
+    protected String timestamp;
     public static WebDriver driver;
-    protected static String email;
-    protected static String password;
+    protected static String testClassName;
+    public static String url;
     protected String browser;
+    protected String runMode;
     HomePage homePage;
     MyTicketPage myTicketPage;
     GlobalVariables globalVars;
-    JsonParser jsonParser;
-    Map<String, String> data;
 
     public TestBase() {
-        LogManager.getRootLogger();
-        ConfigParser configParser = new ConfigParser("resources/config.properties");
-        globalVars = new GlobalVariables(configParser);
-        browser = globalVars.getBrowser();
+        initReport();
+    }
+
+    @DataProvider(name = "dataProvider")
+    public Object[][] getDataFromFile(Method method) {
+        testClassName = method.getDeclaringClass().getSimpleName();
+        Map<String, Map<String, String>> testData = JSONUtils.getTestData(testClassName);
+        Object[][] data = new Object[testData.size()][1];
+        int index = 0;
+        for (Map.Entry<String, Map<String, String>> entry : testData.entrySet()) {
+            data[index++][0] = entry.getValue();
+        }
+        return data;
     }
 
     @BeforeSuite
     public void setUp() {
-        initReport();
-        driver = initDriver(browser);
-        jsonParser = new JsonParser("resources/testdata.json");
-        String testClassName = getTestClassName();
-        data = jsonParser.getTestDataForTestClass(testClassName);
-        email = globalVars.getEmail();
-        password = globalVars.getPassword();
-        driver.get(globalVars.getBaseUrl());
+        ConfigParser configParser = new ConfigParser("resources/config.properties");
+        globalVars = new GlobalVariables(configParser);
+        runMode = globalVars.getRunMode();
+        browser = globalVars.getBrowser();
+        url = globalVars.getBaseUrl();
+        initDriver(browser, runMode);
+    }
+
+    @BeforeClass
+    public void setUpClass() {
+        driver.get(url);
     }
 
     @AfterClass
@@ -76,18 +89,6 @@ public class TestBase {
         }
     }
 
-    protected String getTestClassName() {
-        return this.getClass().getName();
-    }
-
-    public static String getEmail() {
-        return email;
-    }
-
-    public static String getPassword() {
-        return password;
-    }
-
     public void initReport() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HHmmss");
@@ -98,14 +99,21 @@ public class TestBase {
         extentReports.attachReporter(htmlReporter);
     }
 
-    public WebDriver initDriver(String browser) {
+    public void initDriver(String browser, String runMode) {
+        boolean isHeadless = false;
+        if (runMode.equalsIgnoreCase("headless")) {
+            browser = "chrome";
+            isHeadless = true;
+        }
         switch (browser.toLowerCase()) {
             case "chrome":
-                ChromeOptions options = new ChromeOptions();
-                //options.addArguments("--headless");
-                options.addArguments("--window-size=1920,1080");
+                ChromeOptions chromeOptions = new ChromeOptions();
+                if (isHeadless) {
+                    chromeOptions.addArguments("--headless");
+                    chromeOptions.addArguments("--window-size=1920,1080");
+                }
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver(options);
+                driver = new ChromeDriver(chromeOptions);
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
@@ -122,20 +130,24 @@ public class TestBase {
         driver.manage().window().maximize();
         driver.manage().deleteAllCookies();
         driver.manage().timeouts().pageLoadTimeout(WAIT_TIME_30_SECS, TimeUnit.SECONDS);
-        return driver;
     }
 
-    public static ExtentReports getExtentReports() {
+    protected ExtentReports getExtentReports() {
         return extentReports;
     }
 
-    public static void setExtentTest(ExtentTest test) {
+    protected String getTestClassName() {
+        return testClassName;
+    }
+
+    protected void setExtentTest(ExtentTest test) {
         extentTest = test;
     }
 
-    public static void logStep(Status status, String message) {
+    protected void logStep(Status status, String message) {
         if (extentTest != null) {
             extentTest.log(status, message);
         }
     }
+
 }

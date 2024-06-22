@@ -1,10 +1,18 @@
 {
   "FTTC02": {
-    "Amount": "7",
-    "Status": "Paid"
+    "Data1": {
+      "Email": "kfdosfadfakff@sharklasers.com",
+      "Password": "M0Wwpmk1gl",
+      "Amount": "7",
+      "Status": "Paid"
+    }
   },
   "FTTC01": {
-    "DepartStation": "Sài Gòn",
-    "Amount": "7"
+    "Data1": {
+      "Email": "eruujdsu@sharklasers.com",
+      "Password": "M0Wwpmk1gl",
+      "Amount": "7",
+      "DepartStation": "Sài Gòn"
+    }
   }
 }
