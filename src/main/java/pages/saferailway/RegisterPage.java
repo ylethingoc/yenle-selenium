@@ -1,32 +1,36 @@
 package pages.saferailway;
 
-import helpers.WebDriverHelper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import pages.PageBase;
 
-public class RegisterPage {
+public class RegisterPage extends PageBase {
 
-    private final WebDriver driver;
+    private final By emailTextbox = By.cssSelector("#email");
+    private final By pwdTextbox = By.cssSelector("#password");
+    private final By confirmPwdTextbox = By.cssSelector("#confirmPassword");
+    private final By pidTextbox = By.cssSelector("#pid");
+    private final By submitBtn = By.cssSelector("[type='submit']");
 
     public RegisterPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
     public String createANewAccount(String email) {
         String pid = RandomStringUtils.randomNumeric(10);
         String passWord = RandomStringUtils.randomAlphanumeric(10);
 
-        driver.findElement(By.cssSelector("#email")).sendKeys(email);
-        driver.findElement(By.cssSelector("#password")).sendKeys(passWord);
-        driver.findElement(By.cssSelector("#confirmPassword")).sendKeys(passWord);
-        driver.findElement(By.cssSelector("#pid")).sendKeys(pid);
-        driver.findElement(By.cssSelector("[type='submit']")).click();
+        driver.findElement(emailTextbox).sendKeys(email);
+        driver.findElement(pwdTextbox).sendKeys(passWord);
+        driver.findElement(confirmPwdTextbox).sendKeys(passWord);
+        driver.findElement(pidTextbox).sendKeys(pid);
+        driver.findElement(submitBtn).click();
 
         return passWord;
     }
 
     public String getConfirmationMessage() {
-        return WebDriverHelper.waitForElement(driver, By.cssSelector("#content")).getText().trim();
+        return waitForElement(driver, By.cssSelector("#content")).getText().trim();
     }
 }

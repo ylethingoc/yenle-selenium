@@ -1,11 +1,13 @@
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite name="MySuite">
-    <test name="MyTest">
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="TestSuite" parallel="classes" thread-count="1">
+    <listeners>
+        <listener class-name="com.saferailway.listeners.TestNGListener"/>
+    </listeners>
+    <test name="SafeRailway">
         <classes>
-            <class name="CreateAnAccountTest"/>
-            <class name="BookTicketsTest"/>
-            <class name="HerokuDownloadUploadTest"/>
-            <!-- Add more test classes as needed -->
+            <class name="com.saferailway.tests.FTTC01"/>
+            <class name="com.saferailway.tests.FTTC02"/>
         </classes>
     </test>
 </suite>
+

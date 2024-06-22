@@ -39,4 +39,4 @@ build/
 .idea/
 
 ### Config
-resources/account.properties
+outputs/

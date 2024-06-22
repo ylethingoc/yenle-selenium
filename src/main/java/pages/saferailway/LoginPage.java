@@ -1,24 +1,25 @@
 package pages.saferailway;
 
-import helpers.WebDriverHelper;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import pages.PageBase;
 
-public class LoginPage {
+public class LoginPage extends PageBase {
 
-    private final WebDriver driver;
+    private By loginText = By.xpath("//legend[text()='Log in to your account']");
+    private By userTextBox = By.cssSelector("#username");
+    private By pwTextBox = By.cssSelector("#password");
+    private By submitBtn = By.cssSelector("[type='submit']");
 
     public LoginPage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public HomePage loginWithAccount(String email, String passWord) {
-        WebDriverHelper.waitForElement(driver, By.xpath("//legend[text()='Log in to your account']"));
-        driver.findElement(By.cssSelector("#username")).sendKeys(email);
-        driver.findElement(By.cssSelector("#password")).sendKeys(passWord);
-        driver.findElement(By.cssSelector("[type='submit']")).click();
+    public HomePage loginWithValidAccount(String email, String passWord) {
+        waitForElement(driver, loginText);
+        driver.findElement(userTextBox).sendKeys(email);
+        driver.findElement(pwTextBox).sendKeys(passWord);
+        driver.findElement(submitBtn).click();
         return new HomePage(driver);
     }
-
-
 }

@@ -2,22 +2,34 @@ package pages.saferailway;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import pages.PageBase;
 
-public class HomePage {
+public class HomePage extends PageBase {
 
-    private final WebDriver driver;
+    private final String dynamicLabel = "//span[text()='%s']";
 
     public HomePage(WebDriver driver) {
-        this.driver = driver;
+        super(driver);
     }
 
-    public String getWelcomeMessage() {
-        return driver.findElement(By.cssSelector("h1")).getText().trim();
+    public LoginPage clickOnLoginLabel(WebDriver driver) {
+        driver.findElement(By.xpath(String.format(dynamicLabel, "Login"))).click();
+        return new LoginPage(driver);
     }
 
-    public TimeTablePage clickOnTimetable(WebDriver driver) {
-        driver.findElement(By.xpath("//span[text()='Timetable']")).click();
-        return new TimeTablePage(driver);
+    public BookTicketPage clickBookTicketLabel(WebDriver driver) {
+        driver.findElement(By.xpath(String.format(dynamicLabel, "Book ticket"))).click();
+        return new BookTicketPage(driver);
+    }
+
+    public RegisterPage clickOnRegisterLabel(WebDriver driver) {
+        driver.findElement(By.xpath(String.format(dynamicLabel, "Register"))).click();
+        return new RegisterPage(driver);
+    }
+
+    public void clickOnLogOutLabel(WebDriver driver) {
+        driver.findElement(By.xpath(String.format(dynamicLabel, "Log out"))).click();
     }
 
 }
+

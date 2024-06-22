@@ -1,0 +1,10 @@
+{
+  "FTTC02": {
+    "Amount": "7",
+    "Status": "Paid"
+  },
+  "FTTC01": {
+    "DepartStation": "Sài Gòn",
+    "Amount": "7"
+  }
+}
