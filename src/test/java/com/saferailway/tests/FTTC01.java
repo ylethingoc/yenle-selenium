@@ -1,6 +1,7 @@
 package com.saferailway.tests;
 
 import com.aventstack.extentreports.Status;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.saferailway.BookTicketPage;
@@ -21,6 +22,8 @@ public class FTTC01 extends TestBase {
     @Test(dataProvider = "dataProvider", description = "User can filter 'Manager ticket' table with Depart Station")
     public void FTTC01(Map<String, String> data) {
         logStep(Status.INFO,"Step #1: Login with a valid account");
+        WebDriver driver = getDriver();
+        driver.get(globalVars.getBaseUrl());
         HomePage homePage = new HomePage(driver);
         loginPage = homePage.clickOnLoginLabel(driver);
         homePage = loginPage.loginWithValidAccount(data.get("Email"), data.get("Password"));

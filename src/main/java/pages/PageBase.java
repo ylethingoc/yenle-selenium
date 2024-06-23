@@ -11,9 +11,10 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import static utils.GlobalVariables.WAIT_TIME_30_SECS;
+
 public class PageBase {
 
-    private static final int WAIT_TIME_30_SECS = 30;
     protected WebDriver driver;
     protected static Logger logger;
 

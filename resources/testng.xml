@@ -1,5 +1,5 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
-<suite name="TestSuite" parallel="classes" thread-count="1">
+<suite name="TestSuite" parallel="classes" thread-count="2">
     <listeners>
         <listener class-name="com.saferailway.listeners.TestNGListener"/>
     </listeners>

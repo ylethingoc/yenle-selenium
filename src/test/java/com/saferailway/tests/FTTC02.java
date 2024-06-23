@@ -1,6 +1,7 @@
 package com.saferailway.tests;
 
 import com.aventstack.extentreports.Status;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
 import pages.saferailway.BookTicketPage;
@@ -20,6 +21,8 @@ public class FTTC02 extends TestBase {
     @Test(dataProvider = "dataProvider", description = "Error displays when user applies filter with un-existed value of 'Status' in 'Manage ticket' table")
     public void FTTC02(Map<String, String> data) {
         logStep(Status.INFO,"Step #1: Login with a valid account");
+        WebDriver driver = getDriver();
+        driver.get(globalVars.getBaseUrl());
         HomePage homePage = new HomePage(driver);
         loginPage = homePage.clickOnLoginLabel(driver);
         homePage = loginPage.loginWithValidAccount(data.get("Email"), data.get("Password"));

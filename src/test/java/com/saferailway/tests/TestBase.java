@@ -3,7 +3,8 @@ package com.saferailway.tests;
 import com.aventstack.extentreports.ExtentReports;
 import com.aventstack.extentreports.ExtentTest;
 import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.reporter.ExtentHtmlReporter;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -11,7 +12,6 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.safari.SafariDriver;
 import org.testng.annotations.AfterClass;
-import org.testng.annotations.AfterSuite;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
@@ -27,25 +27,18 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static utils.GlobalVariables.WAIT_TIME_30_SECS;
+import static utils.GlobalVariables.WAIT_TIME_60_SECS;
 
 public class TestBase {
 
-    protected ExtentReports extentReports;
-    protected ExtentTest extentTest;
-    protected String timestamp;
-    public static WebDriver driver;
-    protected static String testClassName;
-    public static String url;
-    protected String browser;
-    protected String runMode;
+    protected static String timestamp;
+    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static ExtentReports extentReports;
+    private static ThreadLocal<ExtentTest> extentTest = new ThreadLocal<>();
+    private String testClassName;
+    protected static GlobalVariables globalVars;
     HomePage homePage;
     MyTicketPage myTicketPage;
-    GlobalVariables globalVars;
-
-    public TestBase() {
-        initReport();
-    }
 
     @DataProvider(name = "dataProvider")
     public Object[][] getDataFromFile(Method method) {
@@ -63,29 +56,27 @@ public class TestBase {
     public void setUp() {
         ConfigParser configParser = new ConfigParser("resources/config.properties");
         globalVars = new GlobalVariables(configParser);
-        runMode = globalVars.getRunMode();
-        browser = globalVars.getBrowser();
-        url = globalVars.getBaseUrl();
-        initDriver(browser, runMode);
+        initReport();
     }
 
     @BeforeClass
     public void setUpClass() {
-        driver.get(url);
+        initDriver(globalVars.getBrowser(), Boolean.parseBoolean(globalVars.getHeadlessConfig()));
     }
 
     @AfterClass
     public void removeTicket() {
-        myTicketPage = new MyTicketPage(driver);
+        myTicketPage = new MyTicketPage(getDriver());
         myTicketPage.removeBookedTickets();
-        homePage = new HomePage(driver);
-        homePage.clickOnLogOutLabel(driver);
+        homePage = new HomePage(getDriver());
+        homePage.clickOnLogOutLabel(getDriver());
     }
 
-    @AfterSuite
-    public void tearDown() {
-        if (driver != null) {
-            driver.quit();
+    @AfterClass
+    public void tearDownClass() {
+        if (driver.get() != null) {
+            getDriver().quit();
+            driver.remove();
         }
     }
 
@@ -94,17 +85,18 @@ public class TestBase {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy-HHmmss");
         timestamp = currentDateTime.format(formatter);
         String filePath = "outputs/" + timestamp + "/report.html";
-        ExtentHtmlReporter htmlReporter = new ExtentHtmlReporter(filePath);
+        ExtentSparkReporter sparkReporter = new ExtentSparkReporter(filePath);
+        sparkReporter.config().setDocumentTitle("Test Report");
+        sparkReporter.config().setReportName("SafeRailway Test Report");
+        sparkReporter.config().setTheme(Theme.STANDARD);
         extentReports = new ExtentReports();
-        extentReports.attachReporter(htmlReporter);
+        extentReports.attachReporter(sparkReporter);
     }
 
-    public void initDriver(String browser, String runMode) {
-        boolean isHeadless = false;
-        if (runMode.equalsIgnoreCase("headless")) {
+    public void initDriver(String browser, boolean isHeadless) {
+        if (isHeadless)
             browser = "chrome";
-            isHeadless = true;
-        }
+
         switch (browser.toLowerCase()) {
             case "chrome":
                 ChromeOptions chromeOptions = new ChromeOptions();
@@ -113,40 +105,44 @@ public class TestBase {
                     chromeOptions.addArguments("--window-size=1920,1080");
                 }
                 WebDriverManager.chromedriver().setup();
-                driver = new ChromeDriver(chromeOptions);
+                driver.set(new ChromeDriver(chromeOptions));
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
-                driver = new FirefoxDriver();
+                driver.set(new FirefoxDriver());
                 break;
             case "safari":
                 WebDriverManager.safaridriver().setup();
-                driver = new SafariDriver();
+                driver.set(new SafariDriver());
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
 
-        driver.manage().window().maximize();
-        driver.manage().deleteAllCookies();
-        driver.manage().timeouts().pageLoadTimeout(WAIT_TIME_30_SECS, TimeUnit.SECONDS);
+        getDriver().manage().window().maximize();
+        getDriver().manage().deleteAllCookies();
+        getDriver().manage().timeouts().pageLoadTimeout(WAIT_TIME_60_SECS, TimeUnit.SECONDS);
+    }
+
+    public WebDriver getDriver() {
+        return driver.get();
     }
 
     protected ExtentReports getExtentReports() {
         return extentReports;
     }
 
-    protected String getTestClassName() {
-        return testClassName;
+    protected void setExtentTest(ExtentTest test) {
+        extentTest.set(test);
     }
 
-    protected void setExtentTest(ExtentTest test) {
-        extentTest = test;
+    public ExtentTest getExtentTest() {
+        return extentTest.get();
     }
 
     protected void logStep(Status status, String message) {
         if (extentTest != null) {
-            extentTest.log(status, message);
+            extentTest.get().log(status, message);
         }
     }
 

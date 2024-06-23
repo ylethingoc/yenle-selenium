@@ -5,6 +5,7 @@ import com.aventstack.extentreports.Status;
 import com.saferailway.tests.TestBase;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.io.FileHandler;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
@@ -22,12 +23,12 @@ public class TestNGListener extends TestBase implements ITestListener {
 
     @Override
     public void onFinish(ITestContext result) {
-        extentReports.flush();
+        getExtentReports().flush();
     }
 
     @Override
     public void onTestStart(ITestResult result) {
-        ExtentTest extentTest = extentReports.createTest(result.getMethod().getMethodName());
+        ExtentTest extentTest = getExtentReports().createTest(result.getMethod().getMethodName());
         setExtentTest(extentTest);
     }
 
@@ -38,16 +39,17 @@ public class TestNGListener extends TestBase implements ITestListener {
     @Override
     public void onTestFailure(ITestResult result) {
         try {
-
+            WebDriver driver = getDriver();
             TakesScreenshot ts = (TakesScreenshot) driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
 
-            File theDir = new File("outputs/" + timestamp + "/");
+            File theDir = new File("/outputs/" + timestamp + "/");
             if (!theDir.exists()) {
                 theDir.mkdirs();
             }
 
-            String screenshotPath = "outputs/" + timestamp + "/" + testClassName + "-screenshot.png";
+            String testMethodName = result.getMethod().getMethodName();
+            String screenshotPath = "/outputs/" + timestamp + "/" + testMethodName + "-screenshot.png";
             File destination = new File(screenshotPath);
 
             FileHandler.copy(source, destination);
@@ -56,7 +58,8 @@ public class TestNGListener extends TestBase implements ITestListener {
                 StringWriter sw = new StringWriter();
                 throwable.printStackTrace(new PrintWriter(sw));
                 String exceptionAsString = sw.toString();
-                extentTest.log(Status.FAIL, exceptionAsString);
+                getExtentTest().log(Status.FAIL, exceptionAsString);
+                getExtentTest().addScreenCaptureFromPath(screenshotPath, "Screenshot on failure");
             }
             System.out.println("Screenshot captured: " + screenshotPath);
         } catch (Exception e) {
@@ -66,13 +69,13 @@ public class TestNGListener extends TestBase implements ITestListener {
 
     @Override
     public void onTestSkipped(ITestResult result) {
-        extentTest.log(Status.SKIP, "Test Skipped");
+        getExtentTest().log(Status.SKIP, "Test Skipped");
     }
 
     @Override
     public void onTestFailedButWithinSuccessPercentage(ITestResult result) {
-        extentTest.log(Status.WARNING, "Test Failed but within success percentage");
-        extentTest.log(Status.WARNING, "Failure details: " + result.getThrowable());
+        getExtentTest().log(Status.WARNING, "Test Failed but within success percentage");
+        getExtentTest().log(Status.WARNING, "Failure details: " + result.getThrowable());
     }
 
 }

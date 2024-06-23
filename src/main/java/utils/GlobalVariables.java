@@ -11,13 +11,14 @@ public class GlobalVariables {
         return configParser.getProperty("browser");
     }
 
-    public String getRunMode() {
-        return configParser.getProperty("runMode");
+    public String getHeadlessConfig() {
+        return configParser.getProperty("headless");
     }
 
     public String getBaseUrl() {
         return configParser.getProperty("baseUrl");
     }
 
+    public static int WAIT_TIME_60_SECS = 60;
     public static int WAIT_TIME_30_SECS = 30;
 }
