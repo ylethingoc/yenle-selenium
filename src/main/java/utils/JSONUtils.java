@@ -13,7 +13,7 @@ public class JSONUtils {
         ObjectMapper mapper = new ObjectMapper();
         try {
             Map<String, Map<String, Map<String, String>>> data = mapper.readValue(
-                    new File("resources/testdata.json"),
+                    new File("resources/testdata/testdata.json"),
                     new TypeReference<Map<String, Map<String, Map<String, String>>>>() {}
             );
             return data.get(key);

@@ -43,23 +43,23 @@ public class TestNGListener extends TestBase implements ITestListener {
             TakesScreenshot ts = (TakesScreenshot) driver;
             File source = ts.getScreenshotAs(OutputType.FILE);
 
-            File theDir = new File("/outputs/" + timestamp + "/");
+            File theDir = new File("outputs/" + timestamp + "/");
             if (!theDir.exists()) {
                 theDir.mkdirs();
             }
 
-            String testMethodName = result.getMethod().getMethodName();
-            String screenshotPath = "/outputs/" + timestamp + "/" + testMethodName + "-screenshot.png";
+            String screenshotName = result.getMethod().getMethodName() + "-screenshot.png";
+            String screenshotPath = "outputs/" + timestamp + "/" + screenshotName;
             File destination = new File(screenshotPath);
-
             FileHandler.copy(source, destination);
+
             Throwable throwable = result.getThrowable();
             if (throwable != null) {
                 StringWriter sw = new StringWriter();
                 throwable.printStackTrace(new PrintWriter(sw));
                 String exceptionAsString = sw.toString();
-                getExtentTest().log(Status.FAIL, exceptionAsString);
-                getExtentTest().addScreenCaptureFromPath(screenshotPath, "Screenshot on failure");
+                String screenshotLink = String.format("<img data-featherlight='%s' src=\"%s\">", screenshotName, screenshotName);
+                getExtentTest().log(Status.FAIL, exceptionAsString + screenshotLink);
             }
             System.out.println("Screenshot captured: " + screenshotPath);
         } catch (Exception e) {
