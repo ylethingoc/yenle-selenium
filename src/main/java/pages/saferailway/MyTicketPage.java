@@ -6,24 +6,26 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import pages.PageBase;
+import utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MyTicketPage extends PageBase {
+import static locators.BasePageLocators.SUBMIT_BUTTON;
+import static locators.MyTicketLocators.CANCEL_BUTTON;
+import static locators.MyTicketLocators.DEPART_STATION_COLUMN;
+import static locators.MyTicketLocators.ERROR_MESSAGE;
+import static locators.MyTicketLocators.TABLES_ROWS;
 
-    private final By submitBtn = By.cssSelector("[type='submit']");
-    private final By errorMessage = By.cssSelector(".error.message");
-    private final By filteredDpStationResult = By.cssSelector(".MyTable>tbody>tr>td:nth-child(2)");
-    private final By rowTables = By.cssSelector(".MyTable>tbody>:not(.TableSmallHeader)");
-    private final By cancelBtn = By.cssSelector(".MyTable>tbody>tr:nth-child(2)>td>input[value='Cancel']");
+public class MyTicketPage extends PageBase {
 
     public MyTicketPage(WebDriver driver) {
         super(driver);
     }
 
     public void pickAnOptionToFilter(String category, String option) {
-        scrollToElement(driver, submitBtn);
+        Log.info(String.format("Select option '%s' from '%s' category", option, category));
+        scrollToElement(driver, SUBMIT_BUTTON);
         String name = "FilterDpStation";
         if (category.equalsIgnoreCase("status"))
             name = "FilterStatus";
@@ -32,13 +34,15 @@ public class MyTicketPage extends PageBase {
     }
 
     public void applyFilter() {
-        driver.findElement(submitBtn).click();
+        Log.info("Click on 'Submit' button to apply filter");
+        driver.findElement(SUBMIT_BUTTON).click();
         waitForPageLoaded(driver);
     }
 
     public List<String> getFilteredResult() {
+        Log.info("Get filtered result");
         List<String> textList = new ArrayList<>();
-        List<WebElement> elements = driver.findElements(filteredDpStationResult);
+        List<WebElement> elements = driver.findElements(DEPART_STATION_COLUMN);
         for (WebElement element : elements) {
             String elementText = element.getText().trim();
             textList.add(elementText);
@@ -46,25 +50,28 @@ public class MyTicketPage extends PageBase {
         return textList;
     }
 
-    public String getErrorMessage() {
-        return driver.findElement(errorMessage).getText().trim();
+    public String getAnErrorMessage() {
+        Log.info("Get an error message");
+        return driver.findElement(ERROR_MESSAGE).getText().trim();
     }
 
     public void removeBookedTickets() {
+        Log.info("Remove all tickets");
         pickAnOptionToFilter("Depart Station", "Ignore");
         applyFilter();
 
         try {
-            List<WebElement> elements = driver.findElements(rowTables);
+            List<WebElement> elements = driver.findElements(TABLES_ROWS);
             for (int i = 0; i < elements.size(); i++) {
-                WebElement element = waitForElement(driver, cancelBtn);
+                WebElement element = waitForElement(driver, CANCEL_BUTTON);
                 element.click();
                 Alert alert = waitForAlert(driver);
                 alert.accept();
                 waitForPageLoaded(driver);
             }
-            Thread.sleep(1000);
+            Thread.sleep(getRandomSecond());
         } catch (InterruptedException e) {
+            Log.error("An error occurred while removing tickets:\n", e);
             throw new RuntimeException(e);
         }
     }

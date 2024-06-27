@@ -26,7 +26,7 @@ public class FTTC01 extends TestBase {
         driver.get(globalVars.getBaseUrl());
         HomePage homePage = new HomePage(driver);
         loginPage = homePage.clickOnLoginLabel(driver);
-        homePage = loginPage.loginWithValidAccount(data.get("Email"), data.get("Password"));
+        homePage = loginPage.loginWithAValidAccount(data.get("Email"), data.get("Password"));
 
         logStep(Status.INFO, "Step #2: Book more than 6 tickets with different Depart Stations");
         bookTicketPage = homePage.clickBookTicketLabel(driver);

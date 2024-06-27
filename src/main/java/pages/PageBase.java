@@ -1,7 +1,5 @@
 package pages;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.JavascriptExecutor;
@@ -11,16 +9,16 @@ import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Random;
+
 import static utils.GlobalVariables.WAIT_TIME_30_SECS;
 
 public class PageBase {
 
     protected WebDriver driver;
-    protected static Logger logger;
 
     public PageBase(WebDriver driver) {
         this.driver = driver;
-        logger = LogManager.getRootLogger();
     }
 
     public static void waitForPageLoaded(WebDriver driver) {
@@ -77,4 +75,8 @@ public class PageBase {
         driver.switchTo().window(driver.getWindowHandles().toArray()[tabNum].toString());
     }
 
+    protected int getRandomSecond() {
+        Random random = new Random();
+        return (random.nextInt(3) + 1 ) * 1000;
+    }
 }

@@ -25,7 +25,7 @@ public class FTTC02 extends TestBase {
         driver.get(globalVars.getBaseUrl());
         HomePage homePage = new HomePage(driver);
         loginPage = homePage.clickOnLoginLabel(driver);
-        homePage = loginPage.loginWithValidAccount(data.get("Email"), data.get("Password"));
+        homePage = loginPage.loginWithAValidAccount(data.get("Email"), data.get("Password"));
 
         logStep(Status.INFO,"Step #2: Book more than 6 tickets");
         bookTicketPage = homePage.clickBookTicketLabel(driver);
@@ -39,7 +39,7 @@ public class FTTC02 extends TestBase {
 
         logStep(Status.INFO,"Step #5: Click 'Apply filter' button");
         myTicketPage.applyFilter();
-        Assert.assertEquals(myTicketPage.getErrorMessage(), "Sorry, can't find any results that match your filters.\n" +
+        Assert.assertEquals(myTicketPage.getAnErrorMessage(), "Sorry, can't find any results that match your filters.\n" +
                 "Please change the filters and try again.");
     }
 }

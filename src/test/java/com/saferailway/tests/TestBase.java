@@ -20,6 +20,7 @@ import pages.saferailway.MyTicketPage;
 import utils.ConfigParser;
 import utils.GlobalVariables;
 import utils.JSONUtils;
+import utils.Log;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -54,7 +55,7 @@ public class TestBase {
 
     @BeforeSuite
     public void setUp() {
-        ConfigParser configParser = new ConfigParser("resources/config.properties");
+        ConfigParser configParser = new ConfigParser("src/main/resources/config.properties");
         globalVars = new GlobalVariables(configParser);
         initReport();
     }
@@ -77,6 +78,7 @@ public class TestBase {
         if (driver.get() != null) {
             getDriver().quit();
             driver.remove();
+            Log.info("Browser is closed successfully");
         }
     }
 
@@ -122,6 +124,7 @@ public class TestBase {
         getDriver().manage().window().maximize();
         getDriver().manage().deleteAllCookies();
         getDriver().manage().timeouts().pageLoadTimeout(WAIT_TIME_60_SECS, TimeUnit.SECONDS);
+        Log.info("Browser is initiated successfully");
     }
 
     public WebDriver getDriver() {

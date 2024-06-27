@@ -5,16 +5,15 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
 import pages.PageBase;
+import utils.Log;
 
 import java.util.List;
-import java.util.Random;
+
+import static locators.BasePageLocators.DYNAMIC_LABEL;
+import static locators.BasePageLocators.SUBMIT_BUTTON;
+import static locators.BookTicketPageLocators.DEPART_STATION_OPTIONS;
 
 public class BookTicketPage extends PageBase {
-
-    private final By submitBtn = By.cssSelector("[type='submit']");
-    private final By departStationOptions = By.cssSelector("[name='DepartStation']>option");
-    private final By bookTicketLabel = By.xpath("//span[text()='Book ticket']");
-    private final By myTicketLabel = By.xpath("//span[text()='My ticket']");
 
     public BookTicketPage(WebDriver driver) {
         super(driver);
@@ -22,8 +21,8 @@ public class BookTicketPage extends PageBase {
 
     public void bookTickets(int amount) {
         try {
-            PageBase.logger.info("bookTickets..start");
-            List<WebElement> options = driver.findElements(departStationOptions);
+            Log.info(String.format("Book %s ticket(s)", amount));
+            List<WebElement> options = driver.findElements(DEPART_STATION_OPTIONS);
             for (int i = 1; i <= amount; i++) {
                 Select select = new Select(driver.findElement(By.name("DepartStation")));
                 int value;
@@ -35,25 +34,22 @@ public class BookTicketPage extends PageBase {
                 select.selectByValue(String.valueOf(value));
                 // to prevent page from corrupting
                 Thread.sleep(getRandomSecond());
-                scrollToElement(driver, submitBtn).click();
+                scrollToElement(driver, SUBMIT_BUTTON).click();
                 Thread.sleep(getRandomSecond());
                 if (i != amount) {
-                    driver.findElement(bookTicketLabel).click();
+                    driver.findElement(By.xpath(String.format(DYNAMIC_LABEL, "Book ticket"))).click();
                     Thread.sleep(getRandomSecond());
                 }
             }
         } catch (InterruptedException e) {
+            Log.error("An error occurred while booking tickets:\n", e);
             throw new RuntimeException(e);
         }
     }
 
     public MyTicketPage clickOnMyTicketLabel(WebDriver driver) {
-        driver.findElement(myTicketLabel).click();
+        Log.info("Click on 'My ticket' label");
+        driver.findElement(By.xpath(String.format(DYNAMIC_LABEL, "My ticket"))).click();
         return new MyTicketPage(driver);
-    }
-
-    private int getRandomSecond() {
-        Random random = new Random();
-        return (random.nextInt(3) + 1 ) * 1000;
     }
 }
