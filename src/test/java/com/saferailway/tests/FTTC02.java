@@ -4,10 +4,10 @@ import com.aventstack.extentreports.Status;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.annotations.Test;
-import pages.saferailway.BookTicketPage;
-import pages.saferailway.HomePage;
-import pages.saferailway.LoginPage;
-import pages.saferailway.MyTicketPage;
+import com.saferailway.pages.saferailway.BookTicketPage;
+import com.saferailway.pages.saferailway.HomePage;
+import com.saferailway.pages.saferailway.LoginPage;
+import com.saferailway.pages.saferailway.MyTicketPage;
 
 import java.util.Map;
 

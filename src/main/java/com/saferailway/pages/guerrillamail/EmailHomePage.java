@@ -1,9 +1,9 @@
-package pages.guerrillamail;
+package com.saferailway.pages.guerrillamail;
 
+import com.saferailway.pages.PageBase;
+import com.saferailway.pages.saferailway.RegisterPage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import pages.PageBase;
-import pages.saferailway.RegisterPage;
 
 public class EmailHomePage extends PageBase {
 

@@ -1,17 +1,17 @@
-package pages.saferailway;
+package com.saferailway.pages.saferailway;
 
+import com.saferailway.pages.PageBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import pages.PageBase;
-import utils.Log;
+import com.saferailway.utils.Log;
 
 import java.util.List;
 
-import static locators.BasePageLocators.DYNAMIC_LABEL;
-import static locators.BasePageLocators.SUBMIT_BUTTON;
-import static locators.BookTicketPageLocators.DEPART_STATION_OPTIONS;
+import static com.saferailway.locators.BasePageLocators.DYNAMIC_LABEL;
+import static com.saferailway.locators.BasePageLocators.SUBMIT_BUTTON;
+import static com.saferailway.locators.BookTicketPageLocators.DEPART_STATION_OPTIONS;
 
 public class BookTicketPage extends PageBase {
 

@@ -1,16 +1,16 @@
-package pages.saferailway;
+package com.saferailway.pages.saferailway;
 
+import com.saferailway.pages.PageBase;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.openqa.selenium.WebDriver;
-import pages.PageBase;
-import utils.Log;
+import com.saferailway.utils.Log;
 
-import static locators.BasePageLocators.SUBMIT_BUTTON;
-import static locators.RegisterPageLocators.CONFIRM_MESSAGE;
-import static locators.RegisterPageLocators.CONFIRM_PASSWORD_TEXTBOX;
-import static locators.RegisterPageLocators.EMAIL_TEXTBOX;
-import static locators.RegisterPageLocators.PASSWORD_TEXTBOX;
-import static locators.RegisterPageLocators.PID_TEXTBOX;
+import static com.saferailway.locators.BasePageLocators.SUBMIT_BUTTON;
+import static com.saferailway.locators.RegisterPageLocators.CONFIRM_MESSAGE;
+import static com.saferailway.locators.RegisterPageLocators.CONFIRM_PASSWORD_TEXTBOX;
+import static com.saferailway.locators.RegisterPageLocators.EMAIL_TEXTBOX;
+import static com.saferailway.locators.RegisterPageLocators.PASSWORD_TEXTBOX;
+import static com.saferailway.locators.RegisterPageLocators.PID_TEXTBOX;
 
 public class RegisterPage extends PageBase {
 

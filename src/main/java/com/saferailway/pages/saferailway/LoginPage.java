@@ -1,13 +1,13 @@
-package pages.saferailway;
+package com.saferailway.pages.saferailway;
 
+import com.saferailway.pages.PageBase;
 import org.openqa.selenium.WebDriver;
-import pages.PageBase;
-import utils.Log;
+import com.saferailway.utils.Log;
 
-import static locators.BasePageLocators.SUBMIT_BUTTON;
-import static locators.LoginPageLocators.LOGIN_TEXT;
-import static locators.LoginPageLocators.PASSWORD_TEXTBOX;
-import static locators.LoginPageLocators.USERNAME_TEXTBOX;
+import static com.saferailway.locators.BasePageLocators.SUBMIT_BUTTON;
+import static com.saferailway.locators.LoginPageLocators.LOGIN_TEXT;
+import static com.saferailway.locators.LoginPageLocators.PASSWORD_TEXTBOX;
+import static com.saferailway.locators.LoginPageLocators.USERNAME_TEXTBOX;
 
 public class LoginPage extends PageBase {
 

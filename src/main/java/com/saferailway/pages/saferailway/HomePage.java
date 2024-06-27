@@ -1,11 +1,11 @@
-package pages.saferailway;
+package com.saferailway.pages.saferailway;
 
+import com.saferailway.pages.PageBase;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import pages.PageBase;
-import utils.Log;
+import com.saferailway.utils.Log;
 
-import static locators.BasePageLocators.DYNAMIC_LABEL;
+import static com.saferailway.locators.BasePageLocators.DYNAMIC_LABEL;
 
 public class HomePage extends PageBase {
     

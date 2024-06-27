@@ -1,4 +1,4 @@
-package pages;
+package com.saferailway.pages;
 
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -11,7 +11,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.util.Random;
 
-import static utils.GlobalVariables.WAIT_TIME_30_SECS;
+import static com.saferailway.utils.GlobalVariables.WAIT_TIME_30_SECS;
 
 public class PageBase {
 

@@ -1,4 +1,4 @@
-package locators;
+package com.saferailway.locators;
 
 import org.openqa.selenium.By;
 

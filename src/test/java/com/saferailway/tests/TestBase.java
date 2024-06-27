@@ -15,12 +15,12 @@ import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeSuite;
 import org.testng.annotations.DataProvider;
-import pages.saferailway.HomePage;
-import pages.saferailway.MyTicketPage;
-import utils.ConfigParser;
-import utils.GlobalVariables;
-import utils.JSONUtils;
-import utils.Log;
+import com.saferailway.pages.saferailway.HomePage;
+import com.saferailway.pages.saferailway.MyTicketPage;
+import com.saferailway.utils.ConfigParser;
+import com.saferailway.utils.GlobalVariables;
+import com.saferailway.utils.JSONUtils;
+import com.saferailway.utils.Log;
 
 import java.lang.reflect.Method;
 import java.time.LocalDateTime;
@@ -28,7 +28,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import static utils.GlobalVariables.WAIT_TIME_60_SECS;
+import static com.saferailway.utils.GlobalVariables.WAIT_TIME_60_SECS;
 
 public class TestBase {
 
@@ -55,7 +55,7 @@ public class TestBase {
 
     @BeforeSuite
     public void setUp() {
-        ConfigParser configParser = new ConfigParser("src/main/resources/config.properties");
+        ConfigParser configParser = new ConfigParser("config.properties");
         globalVars = new GlobalVariables(configParser);
         initReport();
     }

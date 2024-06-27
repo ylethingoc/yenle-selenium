@@ -1,21 +1,21 @@
-package pages.saferailway;
+package com.saferailway.pages.saferailway;
 
+import com.saferailway.locators.BasePageLocators;
+import com.saferailway.pages.PageBase;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.Select;
-import pages.PageBase;
-import utils.Log;
+import com.saferailway.utils.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static locators.BasePageLocators.SUBMIT_BUTTON;
-import static locators.MyTicketLocators.CANCEL_BUTTON;
-import static locators.MyTicketLocators.DEPART_STATION_COLUMN;
-import static locators.MyTicketLocators.ERROR_MESSAGE;
-import static locators.MyTicketLocators.TABLES_ROWS;
+import static com.saferailway.locators.MyTicketLocators.CANCEL_BUTTON;
+import static com.saferailway.locators.MyTicketLocators.DEPART_STATION_COLUMN;
+import static com.saferailway.locators.MyTicketLocators.ERROR_MESSAGE;
+import static com.saferailway.locators.MyTicketLocators.TABLES_ROWS;
 
 public class MyTicketPage extends PageBase {
 
@@ -25,7 +25,7 @@ public class MyTicketPage extends PageBase {
 
     public void pickAnOptionToFilter(String category, String option) {
         Log.info(String.format("Select option '%s' from '%s' category", option, category));
-        scrollToElement(driver, SUBMIT_BUTTON);
+        scrollToElement(driver, BasePageLocators.SUBMIT_BUTTON);
         String name = "FilterDpStation";
         if (category.equalsIgnoreCase("status"))
             name = "FilterStatus";
@@ -35,7 +35,7 @@ public class MyTicketPage extends PageBase {
 
     public void applyFilter() {
         Log.info("Click on 'Submit' button to apply filter");
-        driver.findElement(SUBMIT_BUTTON).click();
+        driver.findElement(BasePageLocators.SUBMIT_BUTTON).click();
         waitForPageLoaded(driver);
     }
 

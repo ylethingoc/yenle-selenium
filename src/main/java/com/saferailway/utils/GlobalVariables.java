@@ -1,4 +1,4 @@
-package utils;
+package com.saferailway.utils;
 
 public class GlobalVariables {
     private ConfigParser configParser;
